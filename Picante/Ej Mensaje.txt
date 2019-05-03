@@ -1,0 +1,51 @@
+,1,
+Grabar en 200 el siguiente mensaje:
+
+DB 'Esto es un mensaje',0,'Los 0 son salto de linea',0,'El 1 es el fin de mensaje',1
+
+Utilizar 1 subrutina que imprima el salto de linea
+y otra que imprima por pantalla los otros caracteres
+
+            MOV SI, 200   
+L1:         MOV AL, [SI]        103
+            CMP AL, 1
+            JZ END       	107   
+            CMP AL, 0
+            JNZ L2		10b
+            CALL ENDL     	10d
+            JMP L3              110
+L2:         CALL PRINT          112
+L3:         INC SI          
+            JMP L1          
+END         NOP                 118
+
+PRINT:      PUSH DX         
+            PUSH AX
+            MOV DL, [SI]
+            MOV AH, 2
+            INT 21HN 
+            POP AX
+            POP DX
+            RET
+
+ENDL:       PUSH DX       	300
+            PUSH AX
+            MOV DL, 0D 402A
+
+            MOV AH, 2
+            INT 21H
+            MOV DL, 0A
+            INT 21H
+            POP AX
+            POP DX
+            RET
+
+N .COM
+R CX 400
+R BX 0
+W
+
+JZ = 0
+JNZ
+JA>
+JB<

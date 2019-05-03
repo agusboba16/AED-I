@@ -1,0 +1,57 @@
+1SI 200
+DI 300 		400
+Tabla 1 400 	300
+Tabla 2 500
+Direcciones: 600
+
+16 bytes desde SI
+
+Buscar valor en Tabla 1-H
+Tomar valor en Tabla 1-L
+Buscar Valor en Tabla 2 H
+Tomar valor en Tabla 2 L
+Sumarle 5
+Guardarlo en DI
+
+
+Datos:
+SI:      72 3D 2A 2B 2C 2D 11 2F 12 23 45 56 78 0B 1D
+Tabla 1: 05	0D 79 03 09	4D 0B 28 2F	07 14 5C 10 53 05 26 3D	00 50 55 58 1A 11 0F 2F	40 72 13 4A	0C 62 02
+Tabla 2: 15	00 13 01 00	02 5A 00 47	00 3F 00 0F     03 40 04 12	00 05 00 0D	00 62 00 4C	00 28 05 09	00 0E 00
+
+Resultado DI: 06 07 08 0A
+
+
+        MOV SI, [600]
+        MOV DI, [602]
+        MOV CX, 10
+L1:     MOV AL, [SI]    10b
+        MOV BX, [604]   
+        CMP AH, 1
+        CALL BUSCAR       0114
+        JNZ L2          0117
+        MOV BX, [606]   
+        CALL BUSCAR     11d
+        CMP AH, 1       
+        JNZ L2          123
+        ADD AL, 2
+        MOV [DI], AL
+        INC DI
+L2:     INC SI          12a
+        LOOP L1
+        NOP             
+        
+BUSCAR: PUSH CX         
+        MOV CX, 10
+        MOV AH, 0
+S1:     MOV DL, [BX]    706
+        CMP AL, DL
+        JNZ S2          70a
+        MOV AH, 1
+        INC BX
+        MOV AL, [BX]
+        JMP S3    	711      
+S2:     ADD BX, 2       713
+        LOOP S1
+S3:     POP CX          
+        RET
