@@ -1,0 +1,95 @@
+#include<iostream>
+#include<queue>
+#define salto 9
+#include <limits.h>
+using namespace std;
+float suma = 0;
+struct nodo{
+	int dato;
+	nodo* der;
+	nodo* izq;
+};
+
+class Abb{
+	private:
+		nodo* raiz;
+		nodo* crearNodo(int);
+		nodo* insertarAbb(int,nodo*);
+		nodo* preorden(nodo*);
+		int cantidad(nodo*);
+		float promedio(nodo*);
+	public:
+		Abb();
+		//~Abb();
+		void insertar(int);
+		bool buscar(int);
+		nodo* preorden();
+		nodo* inorden();
+		nodo* postorden();
+		float promedio();
+		int cantidad();
+};
+
+Abb::Abb(){
+	raiz = NULL;
+}
+
+nodo* Abb::crearNodo(int dato){
+	nodo* n = new nodo;
+	n->dato = dato;
+	n->der = NULL;
+	n->izq = NULL;
+	return n;
+}
+
+nodo* Abb::insertarAbb(int dato, nodo* n){
+	if(n==NULL){
+		n = crearNodo(dato);
+		suma+=n->dato;
+	}
+	if(dato < n->dato){
+		n->izq = insertarAbb(dato,n->izq);
+	}
+	else {
+		if(dato > n->dato){
+		n->der = insertarAbb(dato,n->der);
+		}
+	}
+	return n;
+}
+
+void Abb::insertar(int dato){
+	raiz = insertarAbb(dato,raiz);
+}
+
+int Abb::cantidad(nodo* n){
+	if(n!=NULL){
+		return cantidad(n->izq)+1+cantidad(n->der);
+	}
+	return 0;
+}
+int Abb::cantidad(){
+	return cantidad(raiz);
+}
+
+int main(){
+	Abb a1;
+	a1.insertar(15);
+	a1.insertar(14);
+	a1.insertar(16);
+	a1.insertar(9);
+	a1.insertar(11);
+	a1.insertar(19);
+	a1.insertar(22);
+	a1.insertar(26);
+	a1.insertar(2);
+	a1.insertar(1);
+	cout<<"Promedio del arbol: ";
+	float promedio = 0;
+	int x = a1.cantidad();
+	promedio = (suma/x);
+	cout<<promedio<<"\n";
+	system("pause");
+	return 0;
+}
+
